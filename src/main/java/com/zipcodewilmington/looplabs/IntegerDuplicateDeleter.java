@@ -1,9 +1,6 @@
 package com.zipcodewilmington.looplabs;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by leon on 1/29/18.
@@ -13,29 +10,54 @@ public final class IntegerDuplicateDeleter extends DuplicateDeleter<Integer> {
     Map<Integer, Integer> counter;
     public IntegerDuplicateDeleter(Integer[] intArr) {
         super(intArr);
-        populateCountMap();
     }
 
     @Override
     public Integer[] removeDuplicates(int maxNumberOfDuplications) {
-        List<Integer> removed = new ArrayList<>();
-        for (Integer i : array) {
-            if (super.counter.get(i) < maxNumberOfDuplications) {
-                removed.add(i);
+        Integer[] newArr = new Integer[array.length];
+        int arrIdx = 0;
+        int count = 1;
+        for (int i = 0; i < array.length - 1; i++) {
+            if (array[i] != array[i + 1]) {
+                if (count < maxNumberOfDuplications) {
+                    for (int j = 0; j < count; j++) {
+                        newArr[arrIdx++] = array[i];
+                    }
+                }
+                count = 0;
+            }
+            count++;
+        }
+        if (count < maxNumberOfDuplications) {
+            for (int i = 0; i < count; i++) {
+                newArr[arrIdx++] = array[array.length - 1];
             }
         }
-        return removed.toArray(new Integer[0]);
+        return Arrays.copyOf(newArr, arrIdx);
     }
 
     @Override
     public Integer[] removeDuplicatesExactly(int exactNumberOfDuplications) {
-        List<Integer> removed = new ArrayList<>();
-        for (Integer i : array) {
-            if (super.counter.get(i) != exactNumberOfDuplications) {
-                removed.add(i);
+        Integer[] newArr = new Integer[array.length];
+        int arrIdx = 0;
+        int count = 1;
+        for (int i = 0; i < array.length - 1; i++) {
+            if (array[i] != array[i + 1]) {
+                if (count != exactNumberOfDuplications) {
+                    for (int j = 0; j < count; j++) {
+                        newArr[arrIdx++] = array[i];
+                    }
+                }
+                count = 0;
+            }
+            count++;
+        }
+        if (count != exactNumberOfDuplications) {
+            for (int i = 0; i < count; i++) {
+                newArr[arrIdx++] = array[array.length - 1];
             }
         }
-        return removed.toArray(new Integer[0]);
+        return Arrays.copyOf(newArr, arrIdx);
     }
 
 
